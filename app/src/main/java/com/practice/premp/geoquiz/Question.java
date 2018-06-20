@@ -9,7 +9,7 @@ public class Question {
         mAnswerTrue = answerTrue;
     }
 
-    public int getTextResourceId() {
+    public int getTextResId() {
         return mTextResourceId;
     }
 
