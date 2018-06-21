@@ -58,7 +58,7 @@
 
     <Button
         android:id="@+id/next_button"
-        android:layout_width="205dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:text="@string/next_button"
@@ -73,7 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:text="Previous"
+        android:text="@string/previous_button"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/next_button"

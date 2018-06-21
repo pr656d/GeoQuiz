@@ -58,6 +58,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(true);
+                disableButtons(true);
             }
         });
 
@@ -66,6 +67,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(false);
+                disableButtons(true);
             }
         });
 
@@ -73,6 +75,7 @@ public class QuizActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                disableButtons(false);
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
             }
@@ -82,6 +85,7 @@ public class QuizActivity extends AppCompatActivity {
         mPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                disableButtons(false);
                 if (mCurrentIndex == 0) {
                     mCurrentIndex = mQuestionBank.length;
                 }
@@ -129,6 +133,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     // Methods.
+
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
@@ -138,6 +143,12 @@ public class QuizActivity extends AppCompatActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId;
 
+        if (answerIsTrue) {
+            mTrueButton.setBackgroundColor(getResources().getColor(R.color.color_green));
+        } else {
+            mFalseButton.setBackgroundColor(getResources().getColor(R.color.color_green));
+        }
+
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct;
         } else {
@@ -146,4 +157,16 @@ public class QuizActivity extends AppCompatActivity {
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     } // checkAnswer end.
+
+    private void disableButtons(boolean isClickable) {
+        if (isClickable) {
+            mTrueButton.setEnabled(false);
+            mFalseButton.setEnabled(false);
+        } else {
+            mTrueButton.setEnabled(true);
+            mTrueButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            mFalseButton.setEnabled(true);
+            mFalseButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+    }
 }
