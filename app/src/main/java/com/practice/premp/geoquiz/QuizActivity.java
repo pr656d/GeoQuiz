@@ -12,6 +12,7 @@ public class QuizActivity extends AppCompatActivity {
 
     // CONSTANTS
     private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX = "mCurrentIndex";
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -37,6 +38,11 @@ public class QuizActivity extends AppCompatActivity {
         Log.d(TAG, ".onCreate() called.");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        if (savedInstanceState != null) {
+            Log.d(TAG, ".savedInstanceState is not empty.");
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
+        }
 
         // References to ids.
         mQuestionTextView = findViewById(R.id.question_text_view);
@@ -83,7 +89,14 @@ public class QuizActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
-    }
+    } // onCreate end.
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, ".onSaveInstanceState() called.");
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_INDEX, mCurrentIndex);
+    } // onSaveInstanceState end.
 
     @Override
     protected void onStart() {
@@ -119,7 +132,7 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
-    }
+    } // updateQuestion end.
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
@@ -132,5 +145,5 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
-    }
+    } // checkAnswer end.
 }
