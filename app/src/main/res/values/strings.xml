@@ -15,4 +15,5 @@
     <string name="question_android">You are not using android device.</string>
     <string name="question_ahmedabad">Ahmedabad is in India but not in Gujarat.</string>
     <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="judgment_toast">Cheating is wrong!</string>
 </resources>

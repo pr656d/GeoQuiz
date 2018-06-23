@@ -1,5 +1,6 @@
 package com.practice.premp.geoquiz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ public class QuizActivity extends AppCompatActivity {
     // CONSTANTS
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "mCurrentIndex";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -22,8 +24,8 @@ public class QuizActivity extends AppCompatActivity {
     private Button mCheatButton;
     private TextView mQuestionTextView;
 
-    // index to point for a question from array.
-    private int mCurrentIndex = 0;
+    private int mCurrentIndex = 0;  // index to point for a question from array.
+    private boolean mIsCheater;
 
     // Array to store questions and answers.
     private Question[] mQuestionBank = new Question[] {
@@ -81,6 +83,7 @@ public class QuizActivity extends AppCompatActivity {
                 disableButtons(false);
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+                mIsCheater = false;
             }
         });
 
@@ -94,6 +97,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
                 mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
                 updateQuestion();
+                mIsCheater = false;
             }
         });
 
@@ -104,11 +108,23 @@ public class QuizActivity extends AppCompatActivity {
                 // Start cheat activity.
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
                 Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
         });
 
     } // onCreate end.
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK)
+            return;
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            if (data == null)
+                return;
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -158,16 +174,20 @@ public class QuizActivity extends AppCompatActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId;
 
-        if (answerIsTrue) {
-            mTrueButton.setBackgroundColor(getResources().getColor(R.color.color_green));
-        } else {
-            mFalseButton.setBackgroundColor(getResources().getColor(R.color.color_green));
-        }
+//        if (answerIsTrue) {
+//            mTrueButton.setBackgroundColor(getResources().getColor(R.color.color_green));
+//        } else {
+//            mFalseButton.setBackgroundColor(getResources().getColor(R.color.color_green));
+//        }
 
-        if (userPressedTrue == answerIsTrue) {
-            messageResId = R.string.correct;
+        if (mIsCheater) {
+            messageResId = R.string.judgment_toast;
         } else {
-            messageResId = R.string.incorrect;
+            if (userPressedTrue == answerIsTrue) {
+                messageResId = R.string.correct;
+            } else {
+                messageResId = R.string.incorrect;
+            }
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
@@ -179,9 +199,9 @@ public class QuizActivity extends AppCompatActivity {
             mFalseButton.setEnabled(false);
         } else {
             mTrueButton.setEnabled(true);
-            mTrueButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+//            mTrueButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             mFalseButton.setEnabled(true);
-            mFalseButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+//            mFalseButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         }
     }
 }
