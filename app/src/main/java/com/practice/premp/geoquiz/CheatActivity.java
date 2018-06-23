@@ -1,10 +1,14 @@
 package com.practice.premp.geoquiz;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
@@ -57,6 +61,24 @@ public class CheatActivity extends AppCompatActivity {
                     mAnswerTextView.setText(R.string.false_button);
 
                 setAnswerShownResult(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int centerX = mShowAnswerButton.getWidth() / 2;
+                    int centerY = mShowAnswerButton.getHeight() / 2;
+                    float startRadius = mShowAnswerButton.getWidth();
+                    Animator anim = ViewAnimationUtils
+                            .createCircularReveal(mShowAnswerButton, centerX, centerY, startRadius, 0);
+                    anim.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mShowAnswerButton.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    anim.start();
+                } else {
+                    mShowAnswerButton.setVisibility(View.INVISIBLE);
+                }
             }
         });
     } // onCreate end.
