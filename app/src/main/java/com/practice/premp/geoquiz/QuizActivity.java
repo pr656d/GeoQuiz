@@ -28,7 +28,7 @@ public class QuizActivity extends AppCompatActivity {
     private boolean mIsCheater;
 
     // Array to store questions and answers.
-    private Question[] mQuestionBank = new Question[] {
+    private Question[] mQuestionBank = new Question[]{
             new Question(R.string.question_india, true),
             new Question(R.string.question_ocean, true),
             new Question(R.string.question_android, false),
@@ -43,11 +43,6 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        if (savedInstanceState != null) {
-            Log.d(TAG, ".savedInstanceState is not empty.");
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
-        }
-
         // References to ids.
         mQuestionTextView = findViewById(R.id.question_text_view);
         mTrueButton = findViewById(R.id.true_button);
@@ -55,6 +50,11 @@ public class QuizActivity extends AppCompatActivity {
         mNextButton = findViewById(R.id.next_button);
         mPrevButton = findViewById(R.id.previous_button);
         mCheatButton = findViewById(R.id.cheat_button);
+
+        if (savedInstanceState != null) {
+            Log.d(TAG, ".savedInstanceState is not empty.");
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
+        }
 
         updateQuestion();
 

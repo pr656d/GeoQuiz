@@ -11,6 +11,10 @@ public class CheatActivity extends AppCompatActivity {
 
     private static final String EXTRA_ANSWER_IS_TRUE = "com.practice.premp.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.practice.premp.geoquiz.answer_shown";
+    private static final String ANSWER_SHOWN = "shown_answer";
+    private static final String ANSWER_IS = "answer_is";
+
+    private boolean isAnswerShown = false;
 
     private boolean mAnswerIsTrue;
     private TextView mAnswerTextView;
@@ -31,8 +35,15 @@ public class CheatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
 
+        // Reference to ids.
         mAnswerTextView = findViewById(R.id.answer_text_view);
         mShowAnswerButton = findViewById(R.id.show_answer_button);
+
+        if (savedInstanceState != null) {
+            isAnswerShown = savedInstanceState.getBoolean(ANSWER_SHOWN);
+            setAnswerShownResult(isAnswerShown);
+            mAnswerTextView.setText(savedInstanceState.getString(ANSWER_IS));
+        }
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
@@ -50,7 +61,15 @@ public class CheatActivity extends AppCompatActivity {
         });
     } // onCreate end.
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ANSWER_SHOWN, isAnswerShown);
+        outState.putString(ANSWER_IS, (String) mAnswerTextView.getText());
+    }
+
     private void setAnswerShownResult(boolean isAnswerShown) {
+        this.isAnswerShown = isAnswerShown;
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
         setResult(RESULT_OK, data);
