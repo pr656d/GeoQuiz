@@ -1,5 +1,6 @@
 package com.practice.premp.geoquiz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,6 +19,7 @@ public class QuizActivity extends AppCompatActivity {
     private Button mFalseButton;
     private Button mNextButton;
     private Button mPrevButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
 
     // index to point for a question from array.
@@ -50,6 +52,7 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton = findViewById(R.id.false_button);
         mNextButton = findViewById(R.id.next_button);
         mPrevButton = findViewById(R.id.previous_button);
+        mCheatButton = findViewById(R.id.cheat_button);
 
         updateQuestion();
 
@@ -93,6 +96,18 @@ public class QuizActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+
+        // Cheat button listener.
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start cheat activity.
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivity(intent);
+            }
+        });
+
     } // onCreate end.
 
     @Override
